@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 3.2.2 (Python 3.7.3 on win32)" generated="20210109 08:14:51.460" rpa="false">
+<suite id="s1" name="Tests" source="C:\developpement\mon_API\tests">
+<suite id="s1-s1" name="Api" source="C:\developpement\mon_API\tests\api.robot">
+<test id="s1-s1-t1" name="Subscribe User In Db">
+<kw name="Check If User Exist In Database" library="signupBack">
+<kw name="Connect To Database Using Custom Params" library="DatabaseLibrary">
+<doc>Loads the DB API 2.0 module given `dbapiModuleName` then uses it to
+connect to the database using the map string `db_custom_param_string`.</doc>
+<arguments>
+<arg>pymysql</arg>
+<arg>database='demo', user='root', password='', host='localhost'</arg>
+</arguments>
+<msg timestamp="20210109 08:14:51.808" level="INFO">Executing : Connect To Database Using Custom Params : pymysql.connect(db_api_2.connect(database='demo', user='root', password='', host='localhost')) </msg>
+<status status="PASS" starttime="20210109 08:14:51.792" endtime="20210109 08:14:51.814"></status>
+</kw>
+<kw name="Row Count Is 0" library="DatabaseLibrary">
+<doc>Check if any rows are returned from the submitted `selectStatement`. If there are, then this will throw an
+AssertionError. Set optional input `sansTran` to True to run command without an explicit transaction commit or
+rollback.</doc>
+<arguments>
+<arg>select id from users where username = '${USERNAME}' and password = md5('${PASSWORD}')</arg>
+</arguments>
+<msg timestamp="20210109 08:14:51.814" level="INFO">Executing : Row Count Is 0  |  select id from users where username = 'john' and password = md5('doe') </msg>
+<msg timestamp="20210109 08:14:51.814" level="INFO">Executing : Row Count  |  select id from users where username = 'john' and password = md5('doe') </msg>
+<status status="PASS" starttime="20210109 08:14:51.814" endtime="20210109 08:14:51.814"></status>
+</kw>
+<status status="PASS" starttime="20210109 08:14:51.792" endtime="20210109 08:14:51.814"></status>
+</kw>
+<kw name="Subscribe User With Http Post" library="signupBack">
+<kw name="Create Session" library="RequestsLibrary">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>session1</arg>
+<arg>${WEBSITE_LINK}</arg>
+</arguments>
+<msg timestamp="20210109 08:14:51.816" level="INFO">Creating Session using : alias=session1, url=http://localhost/demo/api/user, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" starttime="20210109 08:14:51.816" endtime="20210109 08:14:51.816"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>username=${USERNAME}</arg>
+<arg>password=${PASSWORD}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<msg timestamp="20210109 08:14:51.817" level="INFO">${data} = {'username': 'john', 'password': 'doe'}</msg>
+<status status="PASS" starttime="20210109 08:14:51.816" endtime="20210109 08:14:51.817"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-type=application/x-www-form-urlencoded</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg timestamp="20210109 08:14:51.818" level="INFO">${headers} = {'Content-type': 'application/x-www-form-urlencoded'}</msg>
+<status status="PASS" starttime="20210109 08:14:51.818" endtime="20210109 08:14:51.818"></status>
+</kw>
+<kw name="Post Request" library="RequestsLibrary">
+<doc>*DEPRECATED* Please use `POST On Session` instead.</doc>
+<arguments>
+<arg>session1</arg>
+<arg>signup.php</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<assign>
+<var>${responses}</var>
+</assign>
+<msg timestamp="20210109 08:14:51.818" level="WARN">Keyword 'RequestsLibrary.Post Request' is deprecated. Please use `POST On Session` instead.</msg>
+<msg timestamp="20210109 08:14:51.841" level="INFO">POST Request : url=http://localhost/demo/api/user/signup.php 
+ path_url=/demo/api/user/signup.php 
+ headers={'User-Agent': 'python-requests/2.23.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-type': 'application/x-www-form-urlencoded', 'Content-Length': '26'} 
+ body=username=john&amp;password=doe 
+ </msg>
+<msg timestamp="20210109 08:14:51.841" level="INFO">POST Response : url=http://localhost/demo/api/user/signup.php 
+ status=200, reason=OK 
+ headers={'Date': 'Sat, 09 Jan 2021 07:14:51 GMT', 'Server': 'Apache/2.4.35 (Win64) PHP/7.2.10', 'X-Powered-By': 'PHP/7.2.10', 'Content-Length': '76', 'Keep-Alive': 'timeout=5, max=100', 'Connection': 'Keep-Alive', 'Content-Type': 'text/html; charset=UTF-8'} 
+ body={"status":true,"message":"Successfully Signup!","id":"34","username":"john"} 
+ </msg>
+<msg timestamp="20210109 08:14:51.841" level="INFO">${responses} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20210109 08:14:51.818" endtime="20210109 08:14:51.841"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${responses.json}</arg>
+</arguments>
+<assign>
+<var>${json}</var>
+</assign>
+<msg timestamp="20210109 08:14:51.842" level="INFO">${json} = &lt;bound method Response.json of &lt;Response [200]&gt;&gt;</msg>
+<status status="PASS" starttime="20210109 08:14:51.842" endtime="20210109 08:14:51.842"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${json}</arg>
+</arguments>
+<msg timestamp="20210109 08:14:51.843" level="INFO">&lt;bound method Response.json of &lt;Response [200]&gt;&gt;</msg>
+<status status="PASS" starttime="20210109 08:14:51.842" endtime="20210109 08:14:51.843"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${responses.status_code}</arg>
+<arg>200</arg>
+</arguments>
+<msg timestamp="20210109 08:14:51.844" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" starttime="20210109 08:14:51.843" endtime="20210109 08:14:51.844"></status>
+</kw>
+<status status="PASS" starttime="20210109 08:14:51.814" endtime="20210109 08:14:51.844"></status>
+</kw>
+<kw name="Check If User Is Created" library="signupBack">
+<kw name="Connect To Database Using Custom Params" library="DatabaseLibrary">
+<doc>Loads the DB API 2.0 module given `dbapiModuleName` then uses it to
+connect to the database using the map string `db_custom_param_string`.</doc>
+<arguments>
+<arg>pymysql</arg>
+<arg>database='demo', user='root', password='', host='localhost'</arg>
+</arguments>
+<msg timestamp="20210109 08:14:51.845" level="INFO">Executing : Connect To Database Using Custom Params : pymysql.connect(db_api_2.connect(database='demo', user='root', password='', host='localhost')) </msg>
+<status status="PASS" starttime="20210109 08:14:51.845" endtime="20210109 08:14:51.848"></status>
+</kw>
+<kw name="Row Count Is Equal To X" library="DatabaseLibrary">
+<doc>Check if the number of rows returned from `selectStatement` is equal to the value submitted. If not, then this
+will throw an AssertionError. Set optional input `sansTran` to True to run command without an explicit
+transaction commit or rollback.</doc>
+<arguments>
+<arg>select id from users where username = '${username}' and password = md5('${password}')</arg>
+<arg>1</arg>
+</arguments>
+<msg timestamp="20210109 08:14:51.849" level="INFO">Executing : Row Count Is Equal To X  |  select id from users where username = 'john' and password = md5('doe')  |  1 </msg>
+<msg timestamp="20210109 08:14:51.849" level="INFO">Executing : Row Count  |  select id from users where username = 'john' and password = md5('doe') </msg>
+<status status="PASS" starttime="20210109 08:14:51.848" endtime="20210109 08:14:51.850"></status>
+</kw>
+<status status="PASS" starttime="20210109 08:14:51.845" endtime="20210109 08:14:51.850"></status>
+</kw>
+<tags>
+<tag>First</tag>
+</tags>
+<status status="PASS" starttime="20210109 08:14:51.791" endtime="20210109 08:14:51.850" critical="yes"></status>
+</test>
+<status status="PASS" starttime="20210109 08:14:51.486" endtime="20210109 08:14:51.852"></status>
+</suite>
+<status status="PASS" starttime="20210109 08:14:51.462" endtime="20210109 08:14:51.854"></status>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0">Critical Tests</stat>
+<stat pass="1" fail="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="1" fail="0">First</stat>
+</tag>
+<suite>
+<stat pass="1" fail="0" id="s1" name="Tests">Tests</stat>
+<stat pass="1" fail="0" id="s1-s1" name="Api">Tests.Api</stat>
+</suite>
+</statistics>
+<errors>
+<msg timestamp="20210109 08:14:51.818" level="WARN">Keyword 'RequestsLibrary.Post Request' is deprecated. Please use `POST On Session` instead.</msg>
+</errors>
+</robot>
